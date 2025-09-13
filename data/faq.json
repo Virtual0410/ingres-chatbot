@@ -1,0 +1,52 @@
+[
+  {
+    "question": "How do I submit a groundwater survey?",
+    "answer": "To submit a groundwater survey, log into INGRES → Reports → Submit Survey. Upload the PDF, fill metadata (State, District, Year) and click Submit. Contact nodal@jalshakti.gov for help.",
+    "source": "INGRES_User_Manual.pdf|Section 4"
+  },
+  {
+    "question": "Where can I download the latest groundwater assessment?",
+    "answer": "Latest groundwater assessments are under INGRES → Publications → Groundwater Assessments. Download available PDFs by year and district.",
+    "source": "INGRES_Publications.pdf|Index"
+  },
+  {
+    "question": "What parameters are measured in groundwater quality?",
+    "answer": "Common parameters: pH, TDS, Fluoride, Arsenic, Iron, Nitrate. See the Quality Monitoring section for full list and permissible limits.",
+    "source": "INGRES_Quality_Guide.pdf|Table 2"
+  },
+  {
+    "question": "How often is groundwater data updated?",
+    "answer": "Groundwater survey data is typically updated annually; monitoring wells may be updated monthly depending on the program.",
+    "source": "INGRES_Update_Policy.pdf|Para 2.1"
+  },
+  {
+    "question": "Who can access INGRES data?",
+    "answer": "Access depends on role: Public users can view published reports; government staff with credentials can access survey uploads and raw data.",
+    "source": "INGRES_Access_Control.pdf|Section 3"
+  },
+  {
+    "question": "How to interpret groundwater level trend graphs?",
+    "answer": "Trend graphs show water table depth over time. Decreasing values indicate falling water levels. Check the chart legend for units (m bgl = meters below ground level).",
+    "source": "INGRES_Reports.pdf|Appendix A"
+  },
+  {
+    "question": "How do I request data for research?",
+    "answer": "Send a formal request through INGRES → Contact → Data Request, or email research@jalshakti.gov with project details and required datasets.",
+    "source": "INGRES_Contact.pdf|Page 1"
+  },
+  {
+    "question": "What is the permissible fluoride limit in groundwater?",
+    "answer": "The recommended permissible fluoride concentration is 1.5 mg/L. Refer to national drinking water standards for details.",
+    "source": "WHO_Guidelines_or_National_Standards.pdf|Section 5"
+  },
+  {
+    "question": "How to correct metadata for an uploaded survey?",
+    "answer": "Contact the Administrator from INGRES → Admin → Edit Submissions, or raise a ticket via the Escalation option with the survey ID and corrections needed.",
+    "source": "INGRES_Admin_Guide.pdf|Section 6"
+  },
+  {
+    "question": "How do I escalate an issue or a wrong report?",
+    "answer": "Use the 'Escalate' button in the report view or email escalation@jalshakti.gov with the report ID and a short description of the issue.",
+    "source": "INGRES_Support.pdf|Page 2"
+  }
+]
