@@ -64,10 +64,6 @@ for i, q in enumerate(questions[:9]):  # show first 9 in 3 cols
 
 st.write("---")
 
-# user input area
-user_query = st.text_input("Or type your question here and press Enter", key="user_input")
-submit = st.button("Send")
-
 # --- unified search (autocomplete + keyword) ---
 search_input = st.text_input("🔍 Search or ask a question", key="unified_search")
 
