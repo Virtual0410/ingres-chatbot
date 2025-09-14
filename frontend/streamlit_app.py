@@ -89,16 +89,6 @@ if search_input:
         else:
             st.warning("No results found.")
 
-if submit and user_query:
-    item, score = find_best_match(user_query)
-    st.session_state.history.append({"role": "user", "text": user_query})
-    if item and score > 0.55:
-        st.session_state.history.append({"role": "bot", "text": item["answer"], "score": score, "source": item.get("source","")})
-    else:
-        # fallback
-        fallback = "I don't have that information yet. Would you like me to create an escalation ticket?"
-        st.session_state.history.append({"role": "bot", "text": fallback, "score": score, "source": ""})
-
 # show chat
 for turn in st.session_state.history[::-1]:
     if turn["role"] == "bot":
