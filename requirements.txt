@@ -1,3 +1,6 @@
 streamlit
 python-dotenv
 pandas
+fastapi
+uvicorn
+sqlalchemy
