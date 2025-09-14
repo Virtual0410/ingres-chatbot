@@ -11,9 +11,9 @@ Team Workflow on Github:
 
 1) git clone <url>
 2) git checkout -b their-feature-branch (create their own branch)
-3) Make changes, then 
-    git add . , 
-    git commit -m "message", 
+3) Make changes, then <br>
+    git add . , <br>
+    git commit -m "message",<br> 
     git push origin their-feature-branch
 4) On GitHub, create a Pull Request from their-feature-branch into main.
 5) git checkout main and git pull origin main to get the latest, merged code
