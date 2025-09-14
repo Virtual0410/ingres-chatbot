@@ -39,6 +39,14 @@ def find_best_match(query, cutoff=0.55):
 if "history" not in st.session_state:
     st.session_state.history = []
 
+# --- search helper ---
+def search_faq(keyword):
+    results = []
+    for item in faq:
+        if keyword.lower() in item["question"].lower() or keyword.lower() in item["answer"].lower():
+            results.append(item)
+    return results
+
 # layout
 st.title("INGRES Assistant — Prototype")
 st.markdown("**Built-in quick questions** — click a chip to auto-fill and get the pre-written answer.")
@@ -59,6 +67,31 @@ st.write("---")
 # user input area
 user_query = st.text_input("Or type your question here and press Enter", key="user_input")
 submit = st.button("Send")
+
+# --- unified search (autocomplete + keyword) ---
+search_input = st.text_input("🔍 Search or ask a question", key="unified_search")
+
+if search_input:
+    # 1. Autocomplete check (exact/close match in question list)
+    matched_qs = [q for q in questions if search_input.lower() in q.lower()]
+
+    if matched_qs:
+        st.subheader("📌 Suggestions")
+        for mq in matched_qs:
+            st.write(f"**Q:** {mq}")
+            for item in faq:
+                if item["question"] == mq:
+                    st.caption(item["answer"])
+    else:
+        # 2. Fallback → keyword search in Q & A
+        results = search_faq(search_input)
+        if results:
+            st.subheader("🔎 Results")
+            for r in results:
+                st.write(f"**Q:** {r['question']}")
+                st.caption(r['answer'])
+        else:
+            st.warning("No results found.")
 
 if submit and user_query:
     item, score = find_best_match(user_query)
