@@ -1,6 +1,6 @@
 streamlit
 python-dotenv
 pandas
-fastapi
-uvicorn
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
 sqlalchemy
