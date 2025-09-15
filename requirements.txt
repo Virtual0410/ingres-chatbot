@@ -4,3 +4,6 @@ pandas
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 sqlalchemy
+fastapi
+uvicorn[standard]
+pytest
