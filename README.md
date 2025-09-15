@@ -38,6 +38,7 @@ Day 1: basic Streamlit UI + built-in FAQs.
 
 ## 📂 Project Structure
 ingres-chatbot/<br>
+<pre>
 ├── backend/<br>
   ├── db.py # Database connection & setup<br>
   ├── models.py # Data models (SQLAlchemy)<br>
@@ -51,3 +52,4 @@ ingres-chatbot/<br>
 ├── .gitignore<br>
 ├── requirements.txt<br>
 └── README.md
+</pre>
