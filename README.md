@@ -37,8 +37,8 @@ Day 1: basic Streamlit UI + built-in FAQs.
 -   **Streamlit now talks directly to DB** (backend will connect in Day-4).
 
 ## 📂 Project Structure
-ingres-chatbot/<br>
 <pre>
+ingres-chatbot/<br>
 ├── backend/<br>
   ├── db.py # Database connection & setup<br>
   ├── models.py # Data models (SQLAlchemy)<br>
