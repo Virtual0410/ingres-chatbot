@@ -38,18 +38,18 @@ Day 1: basic Streamlit UI + built-in FAQs.
 
 ## 📂 Project Structure
 <pre>
-ingres-chatbot/<br>
-├── backend/<br>
-  ├── db.py # Database connection & setup<br>
-  ├── models.py # Data models (SQLAlchemy)<br>
-  └── fastapi_app.py # FastAPI server stub<br>
-├── data/<br>
-  └── faq.json # Initial FAQ data<br>
-├── datasets/ # Folder for CSV data files<br>
-├── frontend/<br>
-  └── streamlit_app.py # Main chatbot UI<br>
-├── chatbot.db # SQLite database (auto-generated)<br>
-├── .gitignore<br>
-├── requirements.txt<br>
+ingres-chatbot/
+├── backend/
+  ├── db.py # Database connection & setup
+  ├── models.py # Data models (SQLAlchemy)
+  └── fastapi_app.py # FastAPI server stub
+├── data/
+  └── faq.json # Initial FAQ data
+├── datasets/ # Folder for CSV data files
+├── frontend/
+  └── streamlit_app.py # Main chatbot UI
+├── chatbot.db # SQLite database (auto-generated)
+├── .gitignore
+├── requirements.txt
 └── README.md
 </pre>
