@@ -7,7 +7,30 @@ from datetime import datetime
 import os
 os.makedirs("data", exist_ok=True)
 
+import requests
+from requests.exceptions import RequestException
+
+# small helper to send chat logs to backend without blocking the UI
+def send_chatlog(role: str, message: str):
+    """
+    Send chat message to backend /chatlog/ endpoint.
+    Uses a short timeout and swallows errors so the UI never breaks if backend is down.
+    """
+    try:
+        # We use params because backend expects query params in the current implementation
+        requests.post("http://127.0.0.1:8000/chatlog/", params={"role": role, "message": message}, timeout=1)
+    except RequestException:
+        # fail silently — we don't want to break the frontend if backend is offline
+        pass
+
+
 st.set_page_config(page_title="INGRES Assistant (Prototype)", layout="wide")
+
+with st.sidebar:
+    st.header("Quick Links")
+    st.markdown("[INGRES Website](https://ingres.iith.ac.in/home)")
+    st.markdown("[Groundwater Reports](#)")
+    st.markdown("[User Manual PDF](#)")
 
 # Load FAQ
 FAQ_PATH = Path("data/faq.json")
@@ -48,17 +71,43 @@ if "history" not in st.session_state:
 st.title("INGRES Assistant — Prototype")
 st.markdown("**Built-in quick questions** — click a chip to auto-fill and get the pre-written answer.")
 
-# suggestion chips
+# assume questions is a list of suggestions, e.g. from faq.json
+
+with open("data/faq.json", "r", encoding="utf-8") as f:
+    faq_data = json.load(f)
+
+questions = [item["question"] for item in faq_data]
+
+# create 3 columns for buttons
 cols = st.columns(3)
-for i, q in enumerate(questions[:9]):
+
+for i, q in enumerate(questions[:9]):  # show first 9 in 3 columns
     with cols[i % 3]:
         if st.button(q, key=f"q_{i}"):
+            # user clicked a suggested question
             item, score = find_best_match(q)
-            if item:
-                st.session_state.history.append({"role": "user", "text": q})
-                st.session_state.history.append({"role": "bot", "text": item["answer"], "score": score, "source": item.get("source", "")})
 
-st.write("---")
+            # 1) append user message to chat history
+            st.session_state.history.append({"role": "user", "text": q})
+
+            # 2) send user message to backend (non-blocking)
+            send_chatlog("user", q)
+
+            # 3) determine bot reply and append
+            if item:
+                bot_text = item["answer"]
+                st.session_state.history.append(
+                    {"role": "bot", "text": bot_text, "score": score, "source": item.get("source", "")}
+                )
+
+                # 4) send bot reply to backend
+                send_chatlog("bot", bot_text)
+            else:
+                fallback = "I don't have that information yet. Would you like me to create an escalation ticket?"
+                st.session_state.history.append(
+                    {"role": "bot", "text": fallback, "score": 0.0, "source": ""}
+                )
+                send_chatlog("bot", fallback)
 
 # unified search
 search_input = st.text_input("🔍 Search or ask a question")
@@ -86,33 +135,50 @@ if search_input:
             st.warning("I couldn’t find an answer. Please fill escalation form below:")
 
             with st.form("escalation_form"):
-                user_name = st.text_input("Your Name")
-                user_email = st.text_input("Your Email")
-                category = st.selectbox("Issue Category", ["Data Access", "Report Issue", "Quality Parameters", "Login Problem", "Other"])
-                details = st.text_area("Describe your issue")
+                st.subheader("Escalation Form")
+                name = st.text_input("Name")
+                email = st.text_input("Email")
+                report_id = st.text_input("Report ID")
+                issue = st.text_area("Describe your issue")
                 submitted = st.form_submit_button("Submit")
 
                 if submitted:
-                    import csv, uuid
-                    ticket_id = str(uuid.uuid4())[:8]
-                    with open("data/escalations.csv", "a", newline="", encoding="utf-8") as f:
-                        writer = csv.writer(f)
-                        writer.writerow([ticket_id, user_name, user_email, category, st.session_state.last_query, details])
-                    st.success(f"✅ Your issue has been escalated. Ticket ID: {ticket_id}")
+                    payload = {
+                        "name": name,
+                        "email": email,
+                        "issue": issue,
+                        "report_id": report_id
+                    }
+                    try:
+                        res = requests.post("http://127.0.0.1:8000/escalation/", params=payload)
+                        if res.status_code == 200:
+                            st.success("Escalation submitted successfully!")
+                        else:
+                            st.error("Error submitting escalation")
+                    except Exception as e:
+                        st.error(f"Backend not reachable: {e}")
+
 
 # show chat history
 for turn in st.session_state.history[::-1]:
     if turn["role"] == "bot":
-        st.markdown(f"**INGRES Assistant** — confidence: {turn.get('score', 0):.2f}")
-        st.info(turn["text"])
-        if turn.get("source"):
-            st.caption(f"Source: {turn.get('source')}")
+        with st.chat_message("assistant"):
+            st.markdown(f"**INGRES Assistant** — confidence: {turn.get('score', 0):.2f}")
+            st.markdown(turn["text"])
+            if turn.get("source"):
+                st.caption(f"Source: {turn.get('source')}")
     else:
-        st.write(f"**You:** {turn['text']}")
+        with st.chat_message("user"):
+            st.markdown(turn["text"])
 
-# activity log download
-if st.button("Download chat log"):
-    import io
-    log = "\n".join([f"{datetime.now().isoformat()} - {h['role']}: {h['text']}" for h in st.session_state.history])
-    b = io.BytesIO(log.encode())
-    st.download_button("Download log file", b, file_name="chat_log.txt")
+# # activity log download
+# if st.button("Download chat log"):
+#     import io
+#     log = "\n".join([f"{datetime.now().isoformat()} - {h['role']}: {h['text']}" for h in st.session_state.history])
+#     b = io.BytesIO(log.encode())
+#     st.download_button("Download log file", b, file_name="chat_log.txt")
+
+# Callback function to clear the history
+def clear_chat_history():
+    st.session_state.history = []
+st.button('Clear chat history', on_click=clear_chat_history)
