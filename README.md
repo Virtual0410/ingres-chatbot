@@ -36,20 +36,35 @@ Day 1: basic Streamlit UI + built-in FAQs.
 -   **Introduced a backend folder** with FastAPI stub ("Hello World" + test endpoint).
 -   **Streamlit now talks directly to DB** (backend will connect in Day-4).
 
+## Day 4 Progress:
+
+- Chat window styled + scrollable + avatars.
+- Sidebar polished with links + about section.
+- FAQ expanded with synonyms.
+- Fuzzy search improved with fallback/“did you mean”.
+- Backend GET endpoints (`/chatlog/all`, `/escalations/`).
+
 ## 📂 Project Structure
 <pre>
 ingres-chatbot/
+│
 ├── backend/
-  ├── db.py # Database connection & setup
-  ├── models.py # Data models (SQLAlchemy)
-  └── fastapi_app.py # FastAPI server stub
-├── data/
-  └── faq.json # Initial FAQ data
-├── datasets/ # Folder for CSV data files
+│   ├── main.py             # FastAPI app (chatlog + escalation endpoints)
+│   ├── db.py               # SQLite connection + table creation
+│   └── models.py           # (optional) DB schema helpers
+│
 ├── frontend/
-  └── streamlit_app.py # Main chatbot UI
-├── chatbot.db # SQLite database (auto-generated)
-├── .gitignore
-├── requirements.txt
-└── README.md
+│   ├── streamlit_app.py    # Main Streamlit chatbot app
+│   ├── pages/
+│   │   └── About.py        # Streamlit “About INGRES” page
+│   └── components/         # (optional, custom widgets later)
+│
+├── data/
+│   └── faq.json            # Predefined Q&A pairs
+│
+├── ingres.db               # SQLite database (auto-created)
+│
+├── requirements.txt        # Python dependencies
+├── README.md               # Documentation (Day-4 deliverable)
+└── .gitignore              # Ignore venv, __pycache__, ingres.db etc
 </pre>
